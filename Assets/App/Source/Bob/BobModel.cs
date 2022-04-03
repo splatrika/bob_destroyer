@@ -14,9 +14,14 @@ namespace BobDestroyer.App
         public event Action<IKickable, FinishKick> Kick;
         public event Action<IStompable, FinishStomp> Stomp;
         public event Action<float> Walk;
-        public event Action StayStill;
+        public event Action Idle;
+
+        public float Speed => _speed;
+        public float Direction { get; private set; }
 
         [SerializeField] private float _speed;
+        [SerializeField] private Transform _raycastOrigin;
+        [SerializeField] private float _raycastLength;
 
         private bool isWalking => _velocity != 0;
         private float _velocity;
@@ -47,7 +52,11 @@ namespace BobDestroyer.App
             {
                 return;
             }
-            _velocity = velocity;
+            Direction = Mathf.Sign(velocity);
+            _velocity = velocity * _speed;
+            Vector2 totalVelocity = _rigidbody.velocity;
+            totalVelocity.x = velocity * _speed;
+            _rigidbody.velocity = totalVelocity;
             Walk?.Invoke(_velocity);
         }
 
@@ -56,7 +65,10 @@ namespace BobDestroyer.App
         {
             if (!isWalking) return;
             _velocity = 0 * _speed;
-            StayStill?.Invoke();
+            Idle?.Invoke();
+            Vector2 totalVelocity = _rigidbody.velocity;
+            totalVelocity.x = 0;
+            _rigidbody.velocity = totalVelocity;
         }
 
 
@@ -78,43 +90,33 @@ namespace BobDestroyer.App
         }
 
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            IKickable target = other.attachedRigidbody?.GetComponent<IKickable>();
-            if (target != null)
-            {
-                _kickTarget = target;
-            }
-        }
-
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            IKickable target = other.attachedRigidbody?.GetComponent<IKickable>();
-            if (target == _kickTarget)
-            {
-                _kickTarget = null;
-            }
-        }
-
-
         private void Update()
         {
-            Vector2 target = transform.position;
-            target.x += _velocity * Time.deltaTime;
-            transform.position = target;
+            RaycastHit2D hit = Physics2D.Raycast(_raycastOrigin.position,
+                Vector2.right * Math.Sign(transform.lossyScale.x), _raycastLength);
+            _kickTarget = hit.rigidbody?.GetComponent<IKickable>();
+        }
+
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(_raycastOrigin.position,
+                _raycastOrigin.position + Vector3.right * _raycastLength);
         }
 
 
         private void OnFinishKick()
         {
             _isKicking = false;
+            Idle?.Invoke();
         }
 
 
         private void OnFinishStomp()
         {
             _isStomping = false;
+            Idle?.Invoke();
         }
 
     }
