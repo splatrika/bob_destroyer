@@ -22,7 +22,7 @@ PrefabInstance:
     - target: {fileID: 3687596522089969302, guid: 9cf7086d2ef5c4b6f8346340a558e1f1, type: 3}
       propertyPath: _ruined
       value: 
-      objectReference: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 21300000, guid: 9a81b25fd3c42463ca02c8c352c521fd, type: 3}
     - target: {fileID: 3687596522089969302, guid: 9cf7086d2ef5c4b6f8346340a558e1f1, type: 3}
       propertyPath: _crackStates.Array.size
       value: 2

@@ -23,7 +23,6 @@ namespace BobDestroyer.App
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _model.Stomp += OnStomp;
             _model.Kick += OnKick;
             _model.Walk += OnWalk;
             _model.Idle += OnIdle;
@@ -32,7 +31,6 @@ namespace BobDestroyer.App
 
         private void OnDestroy()
         {
-            _model.Stomp -= OnStomp;
             _model.Kick -= OnKick;
             _model.Walk -= OnWalk;
             _model.Idle -= OnIdle;
@@ -53,15 +51,6 @@ namespace BobDestroyer.App
         {
             _animator.Play(_idleAnimation);
             _animator.speed = 1;
-        }
-
-
-        private void OnStomp(IStompable target, BobModel.FinishStomp callback)
-        {
-            Vector3 anchor = _stompAnchor.transform.position;
-            anchor.x = target.Body.center.x;
-            _stompAnchor.position = anchor;
-            PlayAnimationWithCallback(_stompAnimation, () => callback());
         }
 
 

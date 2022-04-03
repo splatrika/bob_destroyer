@@ -8,6 +8,9 @@ namespace BobDestroyer.App
     {
         public Rect Body { get; private set; }
 
+        [SerializeField] private Sprite _ruined;
+        [SerializeField] private SpriteRenderer _targetRenderer;
+
         private BoxCollider2D _collider;
 
 
@@ -20,7 +23,8 @@ namespace BobDestroyer.App
 
         public void Stomp()
         {
-            Destroy(gameObject);
+            _collider.enabled = false;
+            _targetRenderer.sprite = _ruined;
         }
     }
 
