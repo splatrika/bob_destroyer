@@ -4,10 +4,14 @@ using System;
 namespace BobDestroyer.App
 {
     /// <summary>
-    /// Init rquired
+    /// Init required
     /// </summary>
-    public class Follower2D : MonoBehaviour
+    public class Follower2D : MonoBehaviour, IDirected
     {
+        public event Action<Side> DirectionChanged;
+
+        public Side Direction { get; private set; }
+
         private Vector2 _totalTarget => (Vector2)_target.position + _offset;
         private Transform _target;
         private Vector2 _mask;
@@ -53,14 +57,20 @@ namespace BobDestroyer.App
                 return;
             }
             Vector2 distance = (_totalTarget - (Vector2)_transform.position) * _mask;
-            Vector2 direction = distance.normalized;
-            Vector2 velocity = direction * _speed;
+            Vector2 vectorDirection = distance.normalized;
+            Side actualDirection = (Side)Mathf.Sign(vectorDirection.x);
+            if (actualDirection != Direction)
+            {
+                Direction = actualDirection;
+                DirectionChanged?.Invoke(actualDirection);
+            }
+            Vector2 velocity = vectorDirection * _speed * Time.deltaTime;
             if (velocity.magnitude > distance.magnitude)
             {
                 _transform.position = _totalTarget;
                 return;
             }
-            _transform.position += (Vector3)velocity * Time.deltaTime;
+            _transform.position += (Vector3)velocity;
         }
     }
 

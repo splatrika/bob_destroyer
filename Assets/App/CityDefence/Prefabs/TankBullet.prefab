@@ -43,11 +43,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3335110277720139257}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4ffb30e9786e47528186b71df78301f, type: 3}
+  m_Script: {fileID: 11500000, guid: b0daf540e4c4a4379ab395af2f8c98ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1
-  _damage: 5
+  _speed: 10
+  _damage: 10
+  _burnTime: 10
 --- !u!212 &7176745554598325693
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -87,7 +88,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_Sprite: {fileID: 21300000, guid: b4dcfba5855de49f98d618b809eb7948, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

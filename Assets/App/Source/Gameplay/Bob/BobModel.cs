@@ -6,7 +6,7 @@ namespace BobDestroyer.App
 {
 
     [RequireComponent(typeof(Rigidbody2D))]
-    public class BobModel : MonoBehaviour
+    public class BobModel : MonoBehaviour, IDamagable
     {
         public delegate void FinishKick();
         public delegate void FinishStomp();
@@ -18,10 +18,13 @@ namespace BobDestroyer.App
 
         public float Speed => _speed;
         public float Direction { get; private set; }
+        public Transform BodyCenterAnchor => _bodyCenterAnchor;
 
         [SerializeField] private float _speed;
         [SerializeField] private Transform _raycastOrigin;
         [SerializeField] private float _raycastLength;
+        [SerializeField] private Transform _bodyCenterAnchor;
+        [SerializeField] private float _lives;
 
         private bool isWalking => _velocity != 0;
         private float _velocity;
@@ -72,9 +75,23 @@ namespace BobDestroyer.App
         }
 
 
+        public void ApplyDamage(float amount)
+        {
+            _lives -= amount;
+        }
+
+
         private void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            if (_bodyCenterAnchor)
+            {
+                throw new NullReferenceException(nameof(_bodyCenterAnchor));
+            }
+            if (_raycastOrigin)
+            {
+                throw new NullReferenceException(nameof(_raycastOrigin));
+            }
         }
 
 
